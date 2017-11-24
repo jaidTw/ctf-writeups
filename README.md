@@ -1,2 +1,2 @@
-# My_writeups
+# ctf-writeups
 My CTF writeups
