@@ -1,7 +1,7 @@
 # NTU Computer Security 2017
-## Homeworks
 
 * [..](./../)
+## Homeworks
 * [homework0](./homework0)
   * [pwn1](./homework0/pwn1.md)
   * [BubbleSort](./homework0/BubbleSort.md)
