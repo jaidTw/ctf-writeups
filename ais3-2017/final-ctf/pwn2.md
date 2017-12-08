@@ -1,7 +1,7 @@
 ## pwn2
 本題可以buffer overflow進行ROP攻擊，`rax`可控，`/bin/sh`必須包含在payload中放到stack上，而`rsp`只能傳遞到`rsi`，因此先試著用`execveat(0, '/bin/sh, 0, 0, 0)`呼叫。
 
-但嘗試的過程中發現execveat()的第5個參數(flag)需為0，在r8，且r8被設為字串不可控制，因此放棄此作法。
+但嘗試的過程中發現`execveat()`的第5個參數(flag)需為0，在`r8`，且`r8被設為字串不可控制，因此放棄此作法。
 
 若要`exec()`，則`rsp`必須傳遞到`rdi`，但並沒有`mov rdi, rsi`的gadget可用，最後是在第一次payload中先`return`回`read_input`中的`mov rdx, rsi`將`rsi`傳遞至`rdx`，讀取輸入(送空白)，再跳回到`main`開頭，`push rdx`然後一路回到`read_input`，此時stack如下：
 
