@@ -11,9 +11,9 @@ void edit_profile(){
 			return ;
 		}
 ```
-若是直接傳`"\x00"`可使`strlen(buf)`為0，導致`realloc`的size為0，則會使`p[idx].name`被`free`，而此處直接return `p[idx].name`並不會被清0，成為dangling pointer。
+若是直接傳`"\x00"`可使`strlen(buf)`為0，導致`realloc()`的size為0，則會使`p[idx].name`被`free()`，而此處直接return所以`p[idx].name`並不會被清0，成為dangling pointer。
 
-接著，此時被free的chunk已經進入fastbin中，但我們再次呼叫`edit_profile`，`realloc`檢查chunk size發現足夠後並不會重新allocate，因此我們可以仍然可以對`p[idx].name`進行寫入，達到overwrite fastbin link中的`FD`的效果。
+接著，此時被free的chunk已經進入fastbin中，但我們再次呼叫`edit_profile()`，`realloc()`檢查chunk size發現足夠後並不會重新allocate，因此我們可以仍然可以對`p[idx].name`進行寫入，達到overwrite fastbin link中的`FD`的效果。
 
 利用overwrite fastbin link，我們可以先將兩塊fake chunk寫在descrption中，再使`FD`指向第二塊fake chunk，之後即可allocate拿到該chunk進行unlink。
 
@@ -36,9 +36,8 @@ FD必須寫為fake chunk的位址，而fake chunk在heap上，因此必須知道
 * unlink target
 因為`edit_profile`中能修改`desc`的code如下，若是指向的空間一開始即為0則無法寫入任何資料。
 ```c
-read(0,p[idx].desc,strlen(p[idx].desc));
+read(0, p[idx].desc, strlen(p[idx].desc));
 ```
-
 
 由於fake chunk寫在descrption內，target必定是`profile[i]->desc`，unlink後target會指向自己-0x18，而若是以`p[0]->desc`為目標，則會指向到heap下方一小塊全部為0的space。
 
