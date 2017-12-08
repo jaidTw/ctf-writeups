@@ -21,7 +21,7 @@
 * [Lab5](./workshop/binary5.md)
 * [Bonus](./workshop/binary-bonus.md)
 #### SSRF
-* [File Acces](./workshop/ssrf-file-access.md)
+* [File Access](./workshop/ssrf-file-access.md)
 * [XXE](./workshop/ssrf-xxe.md)
 * [Struts2](./workshop/ssrf-struts2.md)
 
