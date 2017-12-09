@@ -23,10 +23,12 @@ int encrypt(char *str, int len)
 }
 ```
 可知加密公式為：
-$$ c' = (c * ((i + 1) << (i + 2)\mod 0xAu))+9011$$
-其中$c$為字元、$c'$為加密後之字元、$i$為字元index，
+c' = (c * ((i + 1) << (i + 2)mod 0xAu))+9011
+
+其中c為字元、c'為加密後之字元、i為字元index，
 根據此段公式逆向計算即可解出FLAG
-$$ c = \frac{c` - 9011}{(i + 1) << (i + 2) \mod 0xAu}$$
+
+ c = (c' - 9011)/((i + 1) << (i + 2)) % 0xAu
 ```c
 #include <stdio.h>
 #include <stdlib.h>

@@ -9,6 +9,6 @@
 * [Lab5](./binary5.md)
 * [Bonus](./binary-bonus.md)
 #### SSRF
-* [File Acces](./ssrf-file-access.md)
+* [File Access](./ssrf-file-access.md)
 * [XXE](./ssrf-xxe.md)
 * [Struts2](./ssrf-struts2.md)

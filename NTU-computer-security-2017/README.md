@@ -17,7 +17,7 @@
 * [homework4](./homework4)
   * [fmtfun4u](./homework4/fmtfun4u.md)
   * [hacknote2](./homework4/hacknote2.md)
-  * [profile_manager](./homework4/proflie_manager.md)
+  * [profile_manager](./homework4/profile_manager.md)
 * [homework5](./homework5)
   * [baby_heap_revenge](./homework5/baby_heap_revenge.md)
 
