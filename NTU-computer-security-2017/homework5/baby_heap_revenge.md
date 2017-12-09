@@ -21,9 +21,7 @@ void allocate_heap(){
 再來，有無限次的`malloc()`，但沒有任何`free()`，以及可以隨時看最後一次`malloc()`位址的內容，最後加上提示是使用The house of force，先大概可以整理出以下思路。
 
 1. 試圖overwrite top chunk的size
-
 2. leak出heap的位址
-
 3. 試圖leak stack，使chunk落在satck使用ROP，或是試著leak libc，改寫`__malloc_hook`
 
 首先是overwrite top chunk的`size`，因為8bytes理論上只能蓋掉`prev_size`，但是用類似off-by-one[1]的技巧，當`malloc()`的大小沒有對齊`MINSIZE`(0x10)的時候，會和後一塊chunk共用`prev_size`的空間，導致多出來的bytes就可以繼續往後寫入到`size`。因此，我們只要分配的大小尾數是0x8，後8bytes會跟top chunk的`prev_size`共用，多出來的8bytes就可以蓋掉top chunk的`size`。
@@ -159,19 +157,12 @@ constraints:
 最後整理一下步驟：
 
 1. 第一次`malloc()`，將top size寫為`top size & (pagesize - 1) | PREV_INUSED`
-
 2. 第二次`malloc()`，大小為`fake top size + 0x8`，並將top size寫為`0xffffffffffffffff`
-
 3. 第三次`malloc()`，取得指向原本在unsorted bin中的chunk的chunk，leak heap address
-
 4. 第四次`malloc()`，在上一塊chunk下方再取得一塊chunk，leak main_arena address並算出libc base。
-
 5. 第五次`malloc()`，利用the house of froce使新的top chunk指向`__malloc_hook - 0x10`，同時將`cat /home/baby_heap_revenge/flag`寫到heap上。
-
 6. 第六次`malloc()`，size必須大於之前large bin剩下的chunk size，控制`__malloc_hook`並寫為`system()`
-
 7. 第七次`malloc()`，將之前寫的string address作為size，觸發`__malloc_hook`執行`system("cat /home/baby_heap_revenge/flag")`
-
 
 ### flag
 ```
@@ -247,11 +238,8 @@ r.interactive()
 ```
 ### Reference
 * [Off-By-One Vulnerability (Heap Based)](https://sploitfun.wordpress.com/2015/06/09/off-by-one-vulnerability-heap-based/)
-
     for using unaligned chunk size to overwrite `size` idea
 * [HITCON CTF Qual 2016 - House of Orange Write up](
 http://4ngelboy.blogspot.tw/2016/10/hitcon-ctf-qual-2016-house-of-orange.html)
-
     for using `sysmalloc` to trigger `_int_free` idea
-
     "Awesome technique, very impressive!"
