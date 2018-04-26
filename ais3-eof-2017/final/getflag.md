@@ -1,12 +1,12 @@
 ## getflag
 ### solution
 這是Final唯一解出來的一題Orz。
-首先試著執行題目給的binary發現無法執行，不過flie顯示是relocatable，也可以進行反組譯。反組譯後會看到`kfree`、`printk`和`init_module`之類的symbol、因此猜測是kernel module之類，在remote shell上面用`lsmod`、`demsg、可以看到確實有`getflag`這個kernel module的相關訊息。
+首先試著執行題目給的binary發現無法執行，不過`file`顯示是relocatable，也可以進行反組譯。反組譯後會看到`kfree`、`printk`和`init_module`之類的symbol、因此猜測是kernel module之類，在remote shell上面用`lsmod`、`dmesg`、可以看到確實有`getflag`這個kernel module的相關訊息。
 
 接著以IDA Pro反組譯module，可以看見他會在procfs底下建立`getflag`和`getflag_addr`兩個entry。
 試著`cat /proc/getflag_addr`會輸出一串kernel space address，`cat /proc/getflag`則會顯示`[access denied]`。
 
-到此可以推測目標為leak出存在該kernel memory address的flag，而remote版本為linux 4.4.0，處理器為Intel，而且必須從user mode讀取kernel space，剛好符合Metldown的攻擊要件，因此試著以PoC進行攻擊。
+到此可以推測目標為leak出存在該kernel memory address的flag，而remote版本為linux 4.4.0，處理器為Intel，而且必須從user mode讀取kernel space，剛好符合Meltdown的攻擊要件，因此試著以PoC進行攻擊。
 
 將[原PoC](https://github.com/paboldin/meltdown-exploit/blob/master/meltdown.c)修改成以下版本後，以`getflag_addr`的位址作為執行參數即可讀出flag。
 
