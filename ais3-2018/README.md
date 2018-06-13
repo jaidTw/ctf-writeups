@@ -26,5 +26,5 @@
 * [svega (3)](./pre-exam/misc3.md)
 
 #### crypto
-* [POW](./pre-exam/crypto1.md)
-* [XOR](./pre-exam/crypto2.md)
+* [POW (1)](./pre-exam/crypto1.md)
+* [XOR (2)](./pre-exam/crypto2.md)
