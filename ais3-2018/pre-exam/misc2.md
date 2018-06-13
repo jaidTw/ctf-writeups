@@ -7,5 +7,5 @@
 這題真的令人很想罵幹...
 ### flag
 ```
-FLAG:ais3{youfindtherealflagohyeah}
+ais3{youfindtherealflagohyeah}
 ```

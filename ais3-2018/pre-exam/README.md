@@ -25,5 +25,5 @@
 * [svega (3)](./misc3.md)
 
 #### crypto
-* [POW](./crypto1.md)
-* [XOR](./crypto2.md)
+* [POW (1)](./crypto1.md)
+* [XOR (2)](./crypto2.md)

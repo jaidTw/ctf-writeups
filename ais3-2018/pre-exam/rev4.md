@@ -35,7 +35,7 @@ _BOOL8 __fastcall main_main(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __in
 }
 ```
 `inputkey`裡面只是單純讀取字串，因此來看看`getflag`
-```c=
+```c
 __int64 __fastcall getflag(__int64 a1, __int64 a2, __int64 a3, __int64 a4, __int64 a5, __int64 a6) {
   runtime_stringtoslicerune(a1, a2, a3, v6);
   v34 = v27;
