@@ -8,7 +8,7 @@ int main() {
     printf(buf);
 }
 ```
-本題`vprintf`有40 bytes buffer的format string漏洞，基本上能辦到任意寫跟leak，詭異的點在於連續`vprintf`兩次，但中間卻沒有任何輸入能改變buf。
+本題`printf`有40 bytes buffer的format string漏洞，基本上能辦到任意寫跟leak，詭異的點在於連續`printf`兩次，但中間卻沒有任何輸入能改變buf。
 
 題目給了libc，但只有一次input，就算leak出位址了也不能再次輸入，沒有leak的話也沒辦法知道return的位址來控制rip，
 
