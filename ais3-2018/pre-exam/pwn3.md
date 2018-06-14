@@ -1,11 +1,11 @@
 ## justfmt
 ### solution
-題目大致如下
+`WriteFormatted`會把參數丟到`va_list`傳給`vprintf`，因此實際上就等於`printf`，題目大致能改寫如下
 ```c
 int main() {
     read(0, buf, 40)
-    vprintf(buf);
-    vprintf(buf);
+    printf(buf);
+    printf(buf);
 }
 ```
 本題`vprintf`有40 bytes buffer的format string漏洞，基本上能辦到任意寫跟leak，詭異的點在於連續`vprintf`兩次，但中間卻沒有任何輸入能改變buf。
