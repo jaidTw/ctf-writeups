@@ -30,36 +30,50 @@ read(0
 
 Let's first check the [KVM API](https://www.kernel.org/doc/Documentation/virtual/kvm/api.txt) and understand what it's doing:
 1.  Open kvm, get fd = 3
-   `openat(AT_FDCWD, "/dev/kvm", O_RDWR)    = 3`
+
+`openat(AT_FDCWD, "/dev/kvm", O_RDWR)    = 3`
+   
 2.  check whether the kvm api version equals 12
-   `ioctl(3, KVM_GET_API_VERSION, 0)        = 12`
+
+`ioctl(3, KVM_GET_API_VERSION, 0)        = 12`
+   
 3.  creat a VM，fd = 4
-   `ioctl(3, KVM_CREATE_VM, 0)              = 4`
+
+`ioctl(3, KVM_CREATE_VM, 0)              = 4`
+   
 4.  configure the physical address of VM
-   `ioctl(4, KVM_SET_TSS_ADDR, 0xfffbd000)  = 0`
+
+`ioctl(4, KVM_SET_TSS_ADDR, 0xfffbd000)  = 0`
+   
 5.  allocate the memory needed by VM and set the mapping
 ```
 mmap(NULL, 2097152, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_NORESERVE, -1, 0) = 0x7f1cebda8000
 madvise(0x7f1cebda8000, 2097152, MADV_MERGEABLE) = 0
 ioctl(4, KVM_SET_USER_MEMORY_REGION, {slot=0, flags=0, guest_phys_addr=0, memory_size=2097152, userspace_addr=0x7f1cebda8000}) = 0
 ```
+
 6.  create vcpu，fd = 5
-   `ioctl(4, KVM_CREATE_VCPU, 0)            = 5`
+
+`ioctl(4, KVM_CREATE_VCPU, 0)            = 5`
+
 7.  allocate a shared memory space neede by vcpu
 ```
 ioctl(3, KVM_GET_VCPU_MMAP_SIZE, 0)     = 12288
 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_SHARED, 5, 0) = 0x7f1cec1ab000
 ```
+
 8.  initialize special register
 ```
 ioctl(5, KVM_SET_SREGS, {cs={base=0, limit=4294967295, selector=8, type=11, present=1, dpl=0, db=0, s=1, l=1, g=1, avl=0}, ds={base=0, limit=4294967295, selector=16, type=3, present=1, dpl=0, db=0, s=1, l=1, g=1, avl=0}, es={base=0, limit=4294967295, selector=16, type=3, present=1, dpl=0, db=0, s=1, l=1, g=1, avl=0}, fs={base=0, limit=4294967295, selector=16, type=3, present=1, dpl=0, db=0, s=1, l=1, g=1, avl=0}, gs={base=0, limit=4294967295, selector=16, type=3, present=1, dpl=0, db=0, s=1, l=1, g=1, avl=0}, ss={base=0, limit=4294967295, selector=16, type=3, present=1, dpl=0, db=0, s=1, l=1, g=1, avl=0}, tr={base=0, limit=65535, selector=0, type=11, present=1, dpl=0, db=0, s=0, l=0, g=0, avl=0}, ldt={base=0, limit=65535, selector=0, type=2, present=1, dpl=0, db=0, s=0, l=0, g=0, avl=0}, gdt={base=0, limit=65535}, idt={base=0, limit=65535}, cr0=2147811379, cr2=0, cr3=8192, cr4=32, cr8=0, efer=1280, apic_base=0xfee00900, interrupt_bitmap=[0, 0, 0, 0]}) = 0
 ```
+
 9.  initialize gprs
 ```
 ioctl(5, KVM_SET_REGS, {rax=0, rbx=0, rcx=0, rdx=0, rsi=0, rdi=0, rsp=0x200000, rbp=0, r8=0, r9=0, r10=0, r11=0, r12=0, r13=0, r14=0, r15=0, rip=0, rflags=0x2}) = 0
 ```
 10. start running VM
-    `ioctl(5, KVM_RUN, 0) = 0`
+
+`ioctl(5, KVM_RUN, 0) = 0`
 
 After the VM starts, the program will wait for some input, a byte at once, and after each read it will call `ioctl(5, KVM_RUN, 0)` again.
 
@@ -88,7 +102,7 @@ Try to use frace to trace kvm execute `challenge` and enter 1234 :
 ```
 KVM has called pio\_read() to read the bytes we just inputted, then EXIT because of io event, then RUN again by `challenge`.
 
-Take a look at the value of `CS`, we knoe the VM starts its executution from address `0x0`
+Take a look at the value of `CS`, we know the VM starts its executution from address `0x0`
 ```c
 cs={base=0,
     limit=4294967295,
@@ -99,7 +113,7 @@ cs={base=0,
 }
 ```
 
-By `ltrace`ing the program, I found some data is copy to the guess address `0x0.`
+By `ltrace`ing the program, I found some data is copied to the guess address `0x0.`
 ```
 $ ltrace ./challenge
 memcpy(0x7f3f247a9000, "UH\211\345H\201\354\020(\0\0H\215\205\360\327\377\377\276\0(\0\0H\211\307\350\262\0\0\0\307"..., 4888) = 0x7f3f247a9000
@@ -121,7 +135,7 @@ After some analysis, we can easily identify the functionality of some functions
 
 But there are two strange functions left, `0x172` and `0x1e0`.
 
-Starts from entry, it will read `0x2800` bytes inside the function `0xd1`, using instruction `in` which will trigger `pio\_read()`, then do some stuff in 0x1e0, a byte at once, then finally compare two string located at `0x580` and `0x1320`, and output `Correct!` or `"Wrong!"`.
+Starts from entry, it will read `0x2800` bytes inside the function `0xd1`, using instruction `in` which will trigger `pio_read()`, then do some stuff inside function `0x1e0`, a byte at once, then finally compare two strings located at `0x580` and `0x1320` with length `0x54a`, and output `Correct!` or `"Wrong!"`.
 
 Let's dive into the function `0x1e0`:
 ![](https://i.imgur.com/cRBBWUI.png)
@@ -145,7 +159,7 @@ It looks like after the guess halted, the program will change its rip and restar
 
 ![](https://i.imgur.com/2QvF73a.png)
 
-That's where the works are done, if the KVM exit reason is KVM\_EXIT\_HTL, it will perform some works on the register and rerun the VM, but the decompiler can't properly analyze the operation.
+That's where the works are done, if the KVM exit reason is `KVM_EXIT_HTL`, it will perform some works on the register and rerun the VM, but the decompiler can't properly analyze the operation.
 
 Again, using strace, I can inspect all calls with their arguments:
 ```
@@ -174,7 +188,7 @@ ioctl(5, KVM_SET_REGS, {rax=0xc50b6060, rbx=0, rcx=0x8f6e2804, rdx=0xae0, rsi=0x
 ioctl(5, KVM_RUN, 0)                    = 0
 ```
 Now, it's clear that the program will only change the rip according to the value of rax.
-The change is performed by checking a table in the binary, and it's stored at 0x2020A0
+The change is performed by checking a table in the binary, and it's stored at `0x2020A0`
 
 ![](https://i.imgur.com/VMWCtL4.png)
 ![](https://i.imgur.com/V1gS61R.png)
@@ -294,7 +308,55 @@ Slightly modify the function make it read the memory then dump the chracters in 
                                         0xc00 -> 74(t)
                 0x12c0 ->
                         0xfc0 ->
-
+                                0xd40 ->
+                                        0xcc0 ->
+                                                0xc80 -> 33(3)
+                                                0xca0 -> 37(7)
+                                        0xd20 ->
+                                                0xce0 -> 66(f)
+                                                0xd00 -> 69(i)
+                                0xfa0 ->
+                                        0xe20 ->
+                                                0xda0 ->
+                                                        0xd60 -> 3f(?)
+                                                        0xd80 -> 63(c)
+                                                0xe00 ->
+                                                        0xdc0 -> 62(b)
+                                                        0xde0 -> 64(d)
+                                        0xf80 ->
+                                                0xe80 ->
+                                                        0xe40 -> 67(g)
+                                                        0xe60 -> 72(r)
+                                                0xf60 ->
+                                                        0xee0 ->
+                                                                0xea0 -> a(\n)
+                                                                0xec0 -> 2e(.)
+                                                        0xf40 ->
+                                                                0xf00 -> 32(2)
+                                                                0xf20 -> 65(e)
+                        0x12a0 ->
+                                0x1160 ->
+                                        0x10e0 ->
+                                                0x10a0 ->
+                                                        0x1020 ->
+                                                                0xfe0 -> 6d(m)
+                                                                0x1000 -> 6e(n)
+                                                        0x1080 ->
+                                                                0x1040 -> 78(x)
+                                                                0x1060 -> 7b({)
+                                                0x10c0 -> 61(a)
+                                        0x1140 ->
+                                                0x1100 -> 73(s)
+                                                0x1120 -> 36(6)
+                                0x1280 ->
+                                        0x1240 ->
+                                                0x11c0 ->
+                                                        0x1180 -> 34(4)
+                                                        0x11a0 -> 68(h)
+                                                0x1220 ->
+                                                        0x11e0 -> 6c(l)
+                                        0x1260 -> 20( )
+        0x3b30 -> 0()
 ```
 
 There are apparently some chracters we want!! `f`, `l`, `a`, `g`, `{`, `}`.
