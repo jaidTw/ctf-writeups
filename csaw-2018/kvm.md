@@ -407,11 +407,11 @@ We can thus modify our function again to print out the encoding table, each time
 }
 ```
 
-Extracted the bytes from `0x580` with length `0x54a`, translate to binary string and decode with the table. Unfortunately, since the codes are reversed, the property that codes don't have common prefix now isn't hold anymore. I get something like
+Extracted the bytes from `0x580` with length `0x54a`, translate to binary string and decode with the table. Unfortunately, since the codes are reversed, the property that codes won't share a common prefix now isn't hold anymore. I get something like
 ```
 flag.txt 000660o0017i000017i0000000000711000600t766n1602 0 tuar   oshi oshiefo{11fd 0culd 0ao1  100 ctf tea012s 1 obfuscat0s boi0o0 011101011111111
 ```
-It's almost there, but I can't figure out which character with common prefix to choose, finally, I try to manually replace the binary string based on some known words, like `flag{`, `ctf`, `tea`, `obfuscat`, etc. And I finally get the flag
+It's almost there, but I can't figure out which character with common prefix to choose. Finally, I try to manually replace the binary string based on some known words, like `flag{`, `ctf`, `tea`, `obfuscat`, etc. And I finally get the flag
 ```
 flag.txt11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111000000000000
 1101101101100001110100000000001100100010110010000010000000000110010001011001000001000000000000000000000000000100
@@ -445,7 +445,7 @@ table = {
     'd': '1101010',
     'g': '0011010',
     'r': '1011010',
-#    '\n': '00111010',
+    '\n': '00111010',
     '.': '10111010',
     '2': '01111010',
     'e': '11111010',
@@ -461,12 +461,12 @@ table = {
     'l': '0101110',
     'u': '1101110',
     ' ': '11110',
-#    '': '1',
+    '\': '1',
 }
 
 data = None
 flag = ""
-with open("nativecode", "rb") as f:
+with open("dump", "rb") as f:
     f.seek(0x580)
     data = f.read(0x54a)
 
