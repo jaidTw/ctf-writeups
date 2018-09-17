@@ -5,7 +5,7 @@ Team : 10sec
 * [..](./../)
 * Reversing
   * [A Tour of x86 - Part 1 (50)](./tour_of_x86_1.md)
-  * [kvm](./kvm.md)
+  * [kvm (500)](./kvm.md)
 * Pwn
   * [bigboi (50)](./bigboi.md)
   * [get it? (50)](./get_it.md)
