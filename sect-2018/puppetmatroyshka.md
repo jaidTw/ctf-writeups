@@ -8,10 +8,10 @@ $ file matryoshka
 matryoshka: tcpdump capture file (little-endian) - version 2.4 (Ethernet, capture length 262144)
 ```
 
-Inside the capture file, there are three kismet requests and several tcp requests with length.
+Inside the capture file, there are three kismet requests and several tcp requests with longer length.
 ![](https://i.imgur.com/19Foo4w.png)
 
-All data of kismet requests start with `BZh`, which is the header of bz2 format. First extract these payload from the file, The first and the third request can be decompressed successfully, and we'll get an ext4 image, respectively, but they are empty. While the payload extracted from the second kismet request failed on decompression, the reason is unexpected end. After observing the order of these request, I guess the payload of the second kismet request should be followed by those tcp requests, then I extract the payload of those tcp requests, and concat them together.
+All data of kismet requests start with `BZh`, which is the header of bz2 format. First extract these payload from the files, The first and the third request can be decompressed successfully, and we'll get an ext4 image, respectively, but they are empty. While the payload extracted from the second kismet request failed on decompression, the reason is unexpected end. After observing the order of these request, I guess the payload of the second kismet request should be followed by those tcp streams, then I extract the payload of them, and concat them together.
 
 After the concatenation, it can be successfully decompressed, 
 
@@ -22,7 +22,7 @@ output: bzip2 compressed data, block size = 900k
 $ 7z x output -oextracted
 ```
 
-Take a look at the extracted filesystem, I see a file `2501` and a very large journal file, si first check the `2501` out.
+Take a look at the extracted filesystem, I see a file `2501` and a very large journal file, so let's first check the `2501` out.
 ```
 $ cd extracted
 $ file output~

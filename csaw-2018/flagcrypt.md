@@ -3,9 +3,9 @@
 ### Solution
 
 Send a message with length >= 20 to the server, and the server will reponse with the encrypted message and its length.
-Through observing the provided code, the length of encrypted message will be shorter if there is repeated pattern (length > 3) occur in the plaintext, thus the encryption is vulnerable to [compression side channel attacks](https://www.sjoerdlangkemper.nl/2016/08/23/compression-side-channel-attacks/).
+Through observing the provided code, the length of encrypted message will be shorter if there is repeated pattern (length >= 3) occur in the plaintext, thus the encryption is vulnerable to [compression side channel attacks](https://www.sjoerdlangkemper.nl/2016/08/23/compression-side-channel-attacks/).
 
-The charset is telled in the description, this exploit simply bruteforce the prodcuts of these characters with length = 3 first. Once a pattern found, it will try to extended it with one character at once.
+The charset is telled in the description, this exploit simply bruteforce the prodcuts of these characters with length = 3 first. Once a pattern found, it will try to extended it with single character at once.
 
 A problem is there are 3 bytes patterns with common prefix or subfix ("me_", "ve_") and ("e\_d", "e\_a"), thus I manually change the flag variable and run the script again.
 
@@ -24,7 +24,7 @@ data = r.recvline().strip()
 data, sz = data[:-1], int(data[-1])
 
 minsz = sz
-flag = "me_doesnt_have_a"
+flag = ""
 
 def front_extend():
     global flag

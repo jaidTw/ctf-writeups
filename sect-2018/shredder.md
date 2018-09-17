@@ -2,7 +2,7 @@
 
 ### Solution
 
-`floppy` is an FAT12 image, we can extract an ELF executable `shredder` and a deleted file flag.txt from it using the tool `fatcat`
+`floppy` is a FAT12 image, we can extract an ELF executable `shredder` and a deleted file `flag.txt` from it using the tool `fatcat`
 
 Try to analyze the behaviour of shredder, I found
 * usage `./shredder passes files`...
