@@ -3,7 +3,8 @@
 ### Solution
 
 First decompile the program, and we'll see it open `/dev/kvm` and issue several `ioctl`s.
-![](https://i.imgur.com/TTOCoLu.png)
+
+<img src ="https://i.imgur.com/TTOCoLu.png" height="60%" width="60%"></img>
 
 Then use `strace` to inspect these calls.
 ```
@@ -119,26 +120,28 @@ $ ltrace ./challenge
 memcpy(0x7f3f247a9000, "UH\211\345H\201\354\020(\0\0H\215\205\360\327\377\377\276\0(\0\0H\211\307\350\262\0\0\0\307"..., 4888) = 0x7f3f247a9000
 ```
 These data is located at 0x202174, length = 4888
-![](https://i.imgur.com/iXFqfN5.png)
+
+<img src ="https://i.imgur.com/iXFqfN5.png" height="60%" width="60%"></img>
 
 Extract these bytes from the binary and disassemble it.
 
 After some analysis, we can easily identify the functionality of some functions
 
-![](https://i.imgur.com/B8sVigW.png)
+<img src ="https://i.imgur.com/B8sVigW.png" height="60%" width="60%"></img>
 
-![](https://i.imgur.com/dmzwqBO.png)
+<img src ="https://i.imgur.com/dmzwqBO.png" height="60%" width="60%"></img>
 
-![](https://i.imgur.com/aRSj1cS.png)
+<img src ="https://i.imgur.com/aRSj1cS.png" height="60%" width="60%"></img>
 
-![](https://i.imgur.com/mdHUQOJ.png)
+<img src ="https://i.imgur.com/mdHUQOJ.png" height="60%" width="60%"></img>
 
 But there are two strange functions left, `0x172` and `0x1e0`.
 
 Starts from entry, it will read `0x2800` bytes inside the function `0xd1`, using instruction `in` which will trigger `pio_read()`, then do some stuff inside function `0x1e0`, a byte at once, then finally compare two strings located at `0x580` and `0x1320` with length `0x54a`, and output `Correct!` or `"Wrong!"`.
 
 Let's dive into the function `0x1e0`:
-![](https://i.imgur.com/cRBBWUI.png)
+
+<img src ="https://i.imgur.com/cRBBWUI.png" height="60%" width="60%"></img>
 
 What the heck? The program soon halted after enter the function, how does it return to the main loop?
 
@@ -157,7 +160,7 @@ I gave input of 0x2800 bytes to the program, and grab the log from the ftrace, i
 ```
 It looks like after the guess halted, the program will change its rip and restart again. Let's go back to the binary
 
-![](https://i.imgur.com/2QvF73a.png)
+<img src ="https://i.imgur.com/2QvF73a.png" height="60%" width="60%"></img>
 
 That's where the works are done, if the KVM exit reason is `KVM_EXIT_HTL`, it will perform some works on the register and rerun the VM, but the decompiler can't properly analyze the operation.
 
@@ -190,7 +193,7 @@ ioctl(5, KVM_RUN, 0)                    = 0
 Now, it's clear that the program will only change the rip according to the value of rax.
 The change is performed by checking a table in the binary, and it's stored at `0x2020A0`
 
-![](https://i.imgur.com/VMWCtL4.png)
+<img src ="https://i.imgur.com/VMWCtL4.png" height="60%" width="60%"></img>
 ![](https://i.imgur.com/V1gS61R.png)
 
 The mapping is:
@@ -214,7 +217,7 @@ rax        =>  rip
 ```
 
 After the `nop` slide under the first `hlt` inside `0x1e0`, there is more code with `hlt`:
-![](https://i.imgur.com/itMwHDG.png)
+<img src ="https://i.imgur.com/itMwHDG.png" height="60%" width="60%"></img>
 
 We can now manually chain the blocks together using the table, and finally use our brain to decompile it:
 
