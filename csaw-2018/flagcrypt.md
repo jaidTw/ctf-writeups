@@ -2,8 +2,8 @@
 
 ### Solution
 
-Send a message with length >= 20 to server, and server will reponse with the encrypted message and it length.
-Through observing the provided code, the length of encrypted message will be shorter if there is repeated pattern (length > 3) occur in the plaintext, thus the encryption is vulnerable to compression side channel attacks.
+Send a message with length >= 20 to the server, and the server will reponse with the encrypted message and its length.
+Through observing the provided code, the length of encrypted message will be shorter if there is repeated pattern (length > 3) occur in the plaintext, thus the encryption is vulnerable to [compression side channel attacks](https://www.sjoerdlangkemper.nl/2016/08/23/compression-side-channel-attacks/).
 
 The charset is telled in the description, this exploit simply bruteforce the prodcuts of these characters with length = 3 first. Once a pattern found, it will try to extended it with one character at once.
 
