@@ -6,7 +6,7 @@ The binary doesn't have NX enabled, it first ask for two 15 bytes input on stack
 
 For these 29 bytes, the return address starts at `buf+11` and we can easily overwrite then return to the shellcode on stack. The problem is that we have only 15 bytes for each buffer, not sufficient for a full `execve()` shellcode, and the leak comes after we input our shellcodes, so I can't chain the buffers together.
 
-Finally I put "/bin/sh" after the return address, and making the shellcode fit inside 15 bytes.
+Finally I put "/bin/sh" after the return address, since rsp will point to it after return, and making the shellcode fit inside 15 bytes by simply `mov rdi, rsp`.
 
 ### Exploit
 ```python
