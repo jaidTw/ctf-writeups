@@ -101,7 +101,7 @@ Try to use frace to trace kvm execute `challenge` and enter 1234 :
        challenge-24797 [003] d..1 83184.290414: kvm_entry: vcpu 0
        challenge-24797 [003] .... 83184.290416: kvm_exit
 ```
-KVM has called pio\_read() to read the bytes we just inputted, then EXIT because of io event, then RUN again by `challenge`.
+KVM has called `pio_read()` to read the bytes we just inputted, then `EXIT` because of io event, then `RUN` again by `challenge`.
 
 Take a look at the value of `CS`, we know the VM starts its executution from address `0x0`
 ```c
@@ -119,7 +119,7 @@ By `ltrace`ing the program, I found some data is copied to the guess address `0x
 $ ltrace ./challenge
 memcpy(0x7f3f247a9000, "UH\211\345H\201\354\020(\0\0H\215\205\360\327\377\377\276\0(\0\0H\211\307\350\262\0\0\0\307"..., 4888) = 0x7f3f247a9000
 ```
-These data is located at 0x202174, length = 4888
+These data is located at `0x202174`, length = 4888
 
 <img src ="https://i.imgur.com/iXFqfN5.png" height="60%" width="60%"></img>
 
@@ -145,7 +145,7 @@ Let's dive into the function `0x1e0`:
 
 What the heck? The program soon halted after enter the function, how does it return to the main loop?
 
-I gave input of 0x2800 bytes to the program, and grab the log from the ftrace, it shows:
+I gave input of `0x2800` bytes to the program, and grab the log from the ftrace, it shows:
 ```
        challenge-21643 [000] d..1 89662.281943: kvm_entry: vcpu 0
        challenge-21643 [000] .... 89662.281945: kvm_exit: reason HLT rip 0x201 info 0 0
@@ -266,7 +266,7 @@ int func1e0(char chr, uint8_t *addr) {
 
 Now the things are much clearer, `func1e0` is always called with `addr = 0x1300` at the outmost loop, then it will check if the addr conatins byte `0xff`, if true, then recursively check `addr+8` and `addr+16`.
 
-Look at offset 0x1300, it is actually some kind of address chaining, which finally link to a character.
+Look at offset `0x1300`, it is actually some kind of address chaining together, which finally link to a character.
 ```
 $ od -t x8 -Ax dump | less
 ...
@@ -407,7 +407,7 @@ We can thus modify our function again to print out the encoding table, each time
 }
 ```
 
-Extracted the bytes from 0x580 with length 0x54a, translate to binary string and decode with the table. Unfortunately, since the codes are reversed, the property that codes don't have common prefix now isn't hold anymore. I get something like
+Extracted the bytes from `0x580` with length `0x54a`, translate to binary string and decode with the table. Unfortunately, since the codes are reversed, the property that codes don't have common prefix now isn't hold anymore. I get something like
 ```
 flag.txt 000660o0017i000017i0000000000711000600t766n1602 0 tuar   oshi oshiefo{11fd 0culd 0ao1  100 ctf tea012s 1 obfuscat0s boi0o0 011101011111111
 ```
