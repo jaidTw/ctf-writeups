@@ -2,7 +2,7 @@
 
 ### Solution
 
-Unzip the file and get `youfool!.exe and `ransomware.pyc`.
+Unzip the file and get `youfool!.exe` and `ransomware.pyc`.
 The exe file doesn't seems to be a real executable, use uncompyle6 decompile `ransomware.pyc` first:
 ```python
 # uncompyle6 version 3.2.3
