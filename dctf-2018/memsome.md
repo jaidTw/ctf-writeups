@@ -1,17 +1,17 @@
 ## Memsome (Reverse)
 
 ### Solution
-1. There are many debugger detection, patch all of them first.
+1. There are many debugger detecting code, patch all of them first.
 ![](https://i.imgur.com/r43Xz3r.png)
 
 2. Trace the program and found that it will keep reading a byte sequence and translate into a hex string with length 2240
 ![](https://i.imgur.com/bCQaGmD.png)
 
-3. Each byte from the input will passthrough base64 and `sub_766C` twice, transform into a 16bytes(32chars) string and compare with the string in step.2
+3. Each byte from the input will passthrough base64 and `sub_766C` twice, transform them into a 16bytes(32chars) string and compare with the string in step.2
 ![](https://i.imgur.com/66Vm3od.png)
 ![](https://i.imgur.com/ogcJeFg.png)
 
-4. Collect the offset for string at step.2 first
+4. Collect the offset that data to be read from for string at step.2 first
 ```
 0       0x7abb
 32      0x7acc
@@ -159,7 +159,7 @@ c97a9650ef8edf91d8c20734ec20112e
 44e18699a27596eddd71b7920a04864b
 ```
 
-5. `sub_766C` is to complicated, I spend more than three hourse analyze it and give up. But I finally realize that I just need to enumearte all characters and intercept their encoding result after the second `sub_766C` call using gdb, and build a table
+5. `sub_766C` is too complicated, I spend more than three hours analyze it and give up. But I finally realize that I just need to enumearte all characters and intercept their encoding result(`*$rax`) after the second `sub_766C` call using gdb, and build a table
 ```
 "9cbed6266f60ca7e18c6c18b08ace144": "A",
 "b72f3ce3edc16fc82ac190c670945e83": "B",
@@ -252,7 +252,7 @@ encode_table = {
 }
 
 with open('memsom', 'rb') as b:
-    with open('offset', 'r') as f:
+    with open('offsets', 'r') as f:
         for line in f.readlines():
             _, offset = line.split()
             if offset == "hex1" or offset == "hex2":
