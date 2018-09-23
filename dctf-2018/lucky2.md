@@ -40,7 +40,7 @@ __int64 __fastcall main(__int64 a1, char **a2, char **a3) {
 }
 ```
 
-It will use `time(0)/10` as the seed for `srand()`, and output `time(0)/10000, so the probability to guess the seed at a given period is 1/1000. I wait for the server output time to be carried, and start brute-force guessing the time, then finally I will reach the correct server time, and get the flag.
+It will use `time(0)/10` as the seed for `srand()`, and output `time(0)/10000`, so the probability to guess the seed at a given period is 1/1000. I wait for the server output time to be carried by one, and start brute-force guessing the time, then finally I will reach the correct server time, and get the flag.
 
 ### Exploit (if any)
 ```python
