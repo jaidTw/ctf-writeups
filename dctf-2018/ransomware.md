@@ -30,7 +30,7 @@ f = open('./youfool!.exe', 'w')
 buf = f.write(buf)
 f.close()
 ```
-The code is already cleanup a bit, apparently, a pdf is XOR with the random string to generate the exe file, and we have to recover pdf.
+The code is already clean up a bit, apparently, a pdf is XORed with the random string to generate the exe file, and we have to recover the pdf.
 
 The `password` has 60 bytes and it's difficult to bruteforce, but we can infer some bytes first based on the PDF file structure. There are many documents on the web, just search for them and started from the header and the trailer part, then try to find some text frgaments, keep extend them and we're done.
 
