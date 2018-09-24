@@ -12,6 +12,7 @@
 ![](https://i.imgur.com/ogcJeFg.png)
 
 4. Collect the offset that data to be read from for string at step.2 first
+Note: Some part is directly copy from two hex string, hex1(`0061f1f351a4cddda4257550dc7d3000`) and hex2(`cfff0050c0b39cf3bdde5a373b96b8a1`)
 ```
 0       0x7abb
 32      0x7acc
@@ -228,14 +229,14 @@ c97a9650ef8edf91d8c20734ec20112e
 "44e18699a27596eddd71b7920a04864b": "}",
 ```
 
-6. finally, use the table to substitue the string in step.5
+6. finally, use the table to substitute the string in step.5, any character missing will shown as `^`
 ```
 DCT^{9aa149d1a8a825f582fa7684713ca64ec77ff33bda71de76b51b0a8f1026303c}
 Lossing key:
 {'73747265616d4963545f4553355f6300'}
 ```
 
-7. One character is lossing, I guess it's `F`, subsitue it and it's correct!
+7. One character is missing, I guess it's `F`, subsitute it and it's correct!
 
 ### Exploit
 ```python
