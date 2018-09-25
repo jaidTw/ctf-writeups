@@ -4,15 +4,16 @@
 1. There are many debugger detecting code, patch all of them first.
 ![](https://i.imgur.com/r43Xz3r.png)
 
-2. Trace the program and found that it will keep reading a byte sequence and translate into a hex string with length 2240
+2. Trace the program and found that it will keep reading a byte sequence and translate the sequence into a hex string with length 2240
 ![](https://i.imgur.com/bCQaGmD.png)
 
-3. Each byte from the input will passthrough base64 and `sub_766C` twice, transform them into a 16bytes(32chars) string and compare with the string in step.2
+3. Each byte from the input will passthrough base64 and `sub_766C` twice, encode them into a 32 chars string and compare it with the repective string fragment in step.2
 ![](https://i.imgur.com/66Vm3od.png)
 ![](https://i.imgur.com/ogcJeFg.png)
 
-4. Collect the offset that data to be read from for string at step.2 first
-Note: Some part is directly copy from two hex string, hex1(`0061f1f351a4cddda4257550dc7d3000`) and hex2(`cfff0050c0b39cf3bdde5a373b96b8a1`)
+4. Collect the offset that data to be read from for string at step.2 first.
+
+Note: Some part is directly copy from two hex strings, hex1(`0061f1f351a4cddda4257550dc7d3000`) and hex2(`cfff0050c0b39cf3bdde5a373b96b8a1`)
 ```
 0       0x7abb
 32      0x7acc
@@ -160,7 +161,7 @@ c97a9650ef8edf91d8c20734ec20112e
 44e18699a27596eddd71b7920a04864b
 ```
 
-5. `sub_766C` is too complicated, I spend more than three hours analyze it and give up. But I finally realize that I just need to enumearte all characters and intercept their encoding result(`*$rax`) after the second `sub_766C` call using gdb, and build a table
+5. `sub_766C` is too complicated, I spend more than three hours analyze it and give up. But I finally realize that I just need to enumerate all characters and intercept their encoded result(`*$rax`) after the second `sub_766C` call using gdb, then build a table
 ```
 "9cbed6266f60ca7e18c6c18b08ace144": "A",
 "b72f3ce3edc16fc82ac190c670945e83": "B",
@@ -229,7 +230,7 @@ c97a9650ef8edf91d8c20734ec20112e
 "44e18699a27596eddd71b7920a04864b": "}",
 ```
 
-6. finally, use the table to substitute the string in step.5, any character missing will shown as `^`
+6. Finally, use the table to substitute the string in step.5, any character missing will shown as `^`.
 ```
 DCT^{9aa149d1a8a825f582fa7684713ca64ec77ff33bda71de76b51b0a8f1026303c}
 Lossing key:
