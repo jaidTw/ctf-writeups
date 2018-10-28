@@ -130,7 +130,7 @@ size_t get_flag_ready()
 }
 ```
 
-`flag` is `code` XOR with `key`, but what is `key`?
+`flag` is computed by XOR `code` with `key`, but what is `key`?
 
 ```c
 int md5hash()
@@ -160,7 +160,7 @@ int md5hash()
 }
 ```
 
-In `md5hash`, `buf` is hashed by md5 and written to `buf2`. In `sha1hash`, it will perform similar work, hash `buf2` into `key`. Finally, now we know `key` is `sha1(md5(buf))`, so `flag = code ^ sha1(md5(buf))`.
+In `md5hash`, `buf` is hashed by md5 and written to `buf2`. In `sha1hash`, it will perform similar work, hashes `buf2` into `key`. Finally, now we know `key` is `sha1(md5(buf))`, so `flag = code ^ sha1(md5(buf))`.
 
 Here's the script to decrypt it.
 

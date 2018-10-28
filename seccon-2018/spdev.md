@@ -2,7 +2,7 @@
 
 ### Solution
 
-This challenge is similar to [Special Instruction](), but the binary is AArch64 ELF, thus we can use decompiler this time.
+This challenge is similar to [Special Instruction](./spins.md), but the binary is AArch64 ELF, thus we can use decompiler this time.
 
 ```c
 int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
@@ -73,3 +73,5 @@ for i in range(32):
     r = get_rand()
     print(chr((flag[i] ^ randval[i] ^ r) & 0xFF), end="")
 ```
+
+The flag is `SECCON{UseTheSpecialDeviceFile}`
