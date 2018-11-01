@@ -1,7 +1,7 @@
 ## Classic Pwn (Pwn)
 
 ### Solution
-The programe use `gets()` to read input into a stack buffer, there's no canary, so we can easily use ROP to leak libc and spawn a shell.
+The program use `gets()` to read input into a stack buffer, there's no canary, so we can easily use ROP to leak libc and spawn a shell.
 
 ```python
 #!/usr/bin/env python3
