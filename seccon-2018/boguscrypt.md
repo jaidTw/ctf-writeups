@@ -59,7 +59,7 @@ int __cdecl dec(char *s1, char *s2, int length, char *key) {
 ```
 The program will get the hostname of `127.0.0.2`, reverse the hostname then xor with flag to encrypted the flag, thus we have to know the hostname to decrypt the flag.
 
-There a pcap came with the challenge , analyze it and will found a strange string `cur10us4ndl0ngh0stn4m3` inside a DNS packet.
+We're also given a pcap, analyze it and will found a strange string `cur10us4ndl0ngh0stn4m3` inside a DNS packet.
 Try to using it as the hostname to decrypt the flag:
 ```python
 #!/usr/bin/env python3

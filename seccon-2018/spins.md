@@ -2,7 +2,7 @@
 
 ### Solution
 
-`file` the binary, notice that it's unknwon architecture.
+`file` the binary, notice that it's unknown architecture.
 ```
 $ file runme
 runme: ELF 32-bit MSB executable, *unknown arch 0xdf* version 1 (SYSV), statically linked, not stripped
@@ -33,7 +33,7 @@ ELF Header:
   Section header string table index: 8
 ```
 
-It outputs its architecture is [Moxie](http://moxielogic.org/blog/).
+It outputs the architecture is [Moxie](http://moxielogic.org/blog/).
 
 I've tried `qemu-system-moxie` to run this file, but it hangs after started. Then I compiled `binutils` for target `moxie-unknown-elf`.
 
