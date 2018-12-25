@@ -11,6 +11,7 @@ My CTF writeups
   * [Tokyo Western CTF 2018](./Tokyo-Western-2018) (10sec, 26th place)
   * [SEC-T CTF 2018](./sect-2018) (10sec, 48th place)
   * [CSAW CTF Qualification Round 2018](./csaw-2018) (10sec, 101st place)
-  * [DefCamp CTF Qualification 2018](./dctf-2018) (10sec, 107th place)
+  * [DefCamp CTF Qualification 2018](./dctf-2018) (10sec, 17th place)
   * [BSides Delhi CTF 2018](./bsides-2018) (10sec, 9th place)
   * [SECCON 2018 Online CTF](./seccon-2018) (10sec, 14th place)
+  * DefCamp CTF Final 2018 (10sec, 8th place)
